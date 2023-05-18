@@ -1,0 +1,60 @@
+in X
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+in Y
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+sub Z 0 0
+
+add X X Y
+
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+add Z 0 0
+
+out X
