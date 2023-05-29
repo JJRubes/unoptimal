@@ -37,8 +37,9 @@ loop. In the command table `n` refers to a literal integer in base 10
 | `set`   | 1: `e`                 | Set `D`'s length to 2^[1]                                     |
 | `in`    | 1: `l`                 | Reads a byte from stdin and puts it into [1]                  |
 | `out`   | 1: `e`                 | Writes the byte [1] % 256 to stdout                           |
+| `nop`   |                        | Does nothing                                                  |
 
-### Set
+#### Set
 
 If the `set` command recieves a value less than the current length of
 the `D` loop it will remove elements as it would have read them until
@@ -47,6 +48,25 @@ the loop is the correct length.
 If it recieves a value greater it will add zeros at the current
 position until it has reached the correct length such that the next
 value read will be the same as if the set command was a no-op.
+
+### Control Flow
+
+### If/Else
+
+The `if` command counts. `else` does not. Allows `=`, `<`, `<=`, `>`, `>=`.
+
+### Function Calls
+
+As stated above functions can only have 15, 40, or 60 commands. Function
+calls don't count towards this total. 
+
+Function definitions are of the form `def name ... end` where name is
+the name of the function. 
+
+### Repeat
+
+The `repeat` command counts for one.
+
 
 ## Example programs
 

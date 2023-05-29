@@ -72,28 +72,36 @@ tokens.commands = {
   "set",
   "in",
   "out",
-  "repeat"
+  "nop",
+  "repeat",
+  "if"
 }
 
 tokens.create_token = function()
   if tokens.word == "def" then
-    tokens.name(tokens.word)
-    tokens.token.func_name = tokens.word
+    local name = tokens.word
     tokens.cont()
-    tokens.token.calls = {}
-    tokens.token.commands = 0
+    local func_name = tokens.word
+    tokens.cont()
+    local calls = {}
+    local commands = 0
     while tokens.word ~= "end" do
       for i, val in ipairs(tokens.commands) do
         if tokens.word == val then
-          tokens.token.commands = tokens.token.commands + 1
+          commands = commands + 1
         end
       end
-      table.insert(tokens.token.calls, tokens.create_token())
+      table.insert(calls, tokens.create_token())
     end
     tokens.cont()
+    tokens.token.name = name
+    tokens.token.func_name = func_name
+    tokens.token.calls = calls
+    tokens.token.commands = commands
     if tokens.token.commands ~= 15 and
       tokens.token.calls ~= 40 and
       tokens.token.calls ~= 60 then
+      print(commands)
       error("Function definition contains illegal number of instructions")
     end
     return tokens.return_token()
@@ -103,15 +111,11 @@ tokens.create_token = function()
     tokens.add_e()
     tokens.token.calls = {}
     while tokens.word ~= "end" do
-      local exists = false
       for i, val in ipairs(tokens.commands) do
         if tokens.word == val then
-          exists = true
+          error("Repeat can only contain function calls")
           break
         end
-      end
-      if ~exists then
-        error("Repeat can only contain function calls")
       end
 
       table.insert(tokens.token.calls, tokens.create_token())
@@ -183,10 +187,14 @@ tokens.create_token = function()
     tokens.name(tokens.word)
     tokens.add_e()
     return tokens.return_token()
+  elseif tokens.word == "nop" then
+    tokens.name(tokens.word)
+    return tokens.return_token()
   else
     tokens.token.name = "func_call"
     tokens.token.func_name = tokens.word
     tokens.cont()
+    return tokens.return_token()
   end
 end
 
