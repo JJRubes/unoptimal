@@ -35,9 +35,10 @@ tokens.name = function(name)
 end
 
 tokens.add_l = function()
-  if(tokens.word == "X" or tokens.word == "Y" or
-    tokens.word == "Z" or tokens.word == "D") then
-    table.insert(tokens.token.arguments, tokens.word)
+  local l = string.upper(tokens.word)
+  if l == "X" or l == "Y" or
+    l == "Z" or l == "D" then
+    table.insert(tokens.token.arguments, l)
   else
     error("Invalid Loop Name")
   end
@@ -51,8 +52,9 @@ tokens.add_n = function()
 end
 
 tokens.add_e = function()
-  if(tokens.word == "X" or tokens.word == "Y" or
-    tokens.word == "Z" or tokens.word == "D") then
+  local l = string.upper(tokens.word)
+  if l == "X" or l == "Y" or
+    l == "Z" or l == "D" then
     tokens.add_l()
   else
     tokens.add_n()
@@ -110,6 +112,8 @@ tokens.create_token = function()
     tokens.name(tokens.word)
     tokens.add_e()
     tokens.token.calls = {}
+    local temp = tokens.token
+    tokens.token = {arguments={}}
     while tokens.word ~= "end" do
       for i, val in ipairs(tokens.commands) do
         if tokens.word == val then
@@ -118,10 +122,49 @@ tokens.create_token = function()
         end
       end
 
-      table.insert(tokens.token.calls, tokens.create_token())
+      table.insert(temp.calls, tokens.create_token())
+    end
+    tokens.cont()
+    tokens.token = temp
+    return tokens.return_token()
+
+  elseif tokens.word == "if" then
+    tokens.name(tokens.word)
+    tokens.add_e()
+
+    -- todo validation of comparison
+    tokens.comp = tokens.word
+    tokens.cont()
+
+    local temp = tokens.token
+    temp.on_true = {}
+    temp.on_false = {}
+    tokens.token = {arguments={}}
+    while tokens.word ~= "end" and tokens.word ~= "else" do
+      for i, val in ipairs(tokens.commands) do
+        if tokens.word == val then
+          error("If can only contain function calls")
+          break
+        end
+      end
+
+      table.insert(temp.on_true, tokens.create_token())
+      tokens.cont()
+    end
+    while tokens.word ~= "end" do
+      for i, val in ipairs(tokens.commands) do
+        if tokens.word == val then
+          error("If can only contain function calls")
+          break
+        end
+      end
+
+      table.insert(temp.on_false, tokens.create_token())
       tokens.cont()
     end
     tokens.cont()
+    tokens.token = temp
+    return tokens.return_token()
 
   elseif tokens.word == "add" then
     tokens.name(tokens.word)
@@ -213,7 +256,11 @@ tokens.tokenise = function(code)
   tokens.cont()
 
   while tokens.ip <= #tokens.code do
-    table.insert(tokens.tokens, tokens.create_token())
+    local t = tokens.create_token()
+    if t.name ~= "def" then
+      error("Command outside of function scope")
+    end
+    table.insert(tokens.tokens, t)
   end
   return tokens.tokens
 end

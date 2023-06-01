@@ -65,18 +65,48 @@ interpreter.get_argument = function(token, n)
   return value
 end
 
+interpreter.compare = function(x, y, str)
+  if str == "==" then
+    return x == y
+  elseif str == "!=" then
+    return x ~= y
+  elseif str == "<" then
+    return x < y
+  elseif str == "<=" then
+    return x <= y
+  elseif str == ">" then
+    return x > y
+  elseif str == ">=" then
+    return x >= y
+  else
+    error("compare not work")
+  end
+end
+
 function interpreter.run_command(token)
+  -- print(token.name)
   if token.name == "repeat" then
     local x = interpreter.get_argument(token, 1)
     interpreter.inc_all()
     for i=1, x do
       for i, func in ipairs(token.calls) do
-        interpreter.run_command(token.calls)
+        interpreter.run_command(func)
       end
     end
 
-  elseif token.name == "nop" then
+  elseif token.name == "if" then
+    local x = interpreter.get_argument(token, 1)
+    local y = interpreter.get_argument(token, 2)
     interpreter.inc_all()
+    if interpreter.compare(x, y, token.comp) then
+      for i, func in ipairs(token.on_true) do
+        interpreter.run_command(func)
+      end
+    else
+      for i, func in ipairs(token.on_false) do
+        interpreter.run_command(func)
+      end
+    end
 
   elseif token.name == "add" then
     local x = interpreter.get_argument(token, 2)
@@ -189,13 +219,10 @@ function interpreter.interpret(code)
     end
   end
 
-  while interpreter.tp <= #interpreter.token_list do
-    if token.name ~= "def" then
-      interpreter.run_command(token)
-    end
-    interpreter.tp = interpreter.tp + 1
-    token = interpreter.token_list[interpreter.tp]
+  if not interpreter.funcs.entry then
+    error("no entry function")
   end
+  interpreter.run_command({name="func_call", func_name="entry"})
 end
 
 return interpreter
