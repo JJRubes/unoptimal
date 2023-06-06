@@ -37,7 +37,7 @@ base 10 (ten).
 | `div dest a b`                   | `dest = a / b`                                                |
 | `and dest a b`                   | `dest = a & b`                                                |
 | `xor dest a b`                   | `dest = a ^ b`                                                |
-| `or dest a b`                    | `dest = a | b`                                                |
+| `or dest a b`                    | `dest = a \| b`                                               |
 | `not dest a`                     | `dest = ~a`                                                   |
 | `mov dest a`                     | `dest = a`                                                    |
 | `set n`                          | Set `D`'s length to `2**a`                                    |
