@@ -1,60 +1,66 @@
-in X
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-in Y
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-sub Z 0 0
+def entry
+  in X
+  nop
+  nop
+  nop
+  nop
+  in Y
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  sub Z 0 0
 
-add X X Y
+  add X X Y
 
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
-add Z 0 0
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
 
-out X
+  out X
+
+  nop
+  nop
+  nop
+end

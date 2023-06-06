@@ -1,3 +1,4 @@
+#!/bin/lua
 -- Define variables --
 interpreter = require("interpreter")
 
