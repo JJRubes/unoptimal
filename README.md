@@ -42,7 +42,7 @@ base 10 (ten).
 | `mov dest a`                     | `dest = a`                                                    |
 | `set n`                          | Set `D`'s length to `2**a`                                    |
 | `in dest`                        | Reads a byte from stdin and puts it into `dest`               |
-| `out dest`                       | Write the byte `dest % 256` to stdout                         |
+| `out a`                          | Write the byte `a % 256` to stdout                            |
 | `nop`                            | Does nothing                                                  |
 
 #### Set
