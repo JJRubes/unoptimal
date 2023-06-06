@@ -79,12 +79,38 @@ tokens.commands = {
   "if"
 }
 
+tokens.is_keyword = function(func_name)
+  for i, val in ipairs(tokens.commands) do
+    if func_name == val then
+      return true
+    end
+  end
+  if func_name == "def" then
+    return true
+  end
+  if func_name == "else" then
+    return true
+  end
+  if func_name == "end" then
+    return true
+  end
+  if func_name == "end" then
+    return true
+  end
+  return false
+end
+
 tokens.create_token = function()
   if tokens.word == "def" then
     local name = tokens.word
     tokens.cont()
+
     local func_name = tokens.word
+    if tokens.is_keyword(func_name) then
+      error("Function definition with a reserved name: "..func_name)
+    end
     tokens.cont()
+
     local calls = {}
     local commands = 0
     while tokens.word ~= "end" do
@@ -100,11 +126,10 @@ tokens.create_token = function()
     tokens.token.func_name = func_name
     tokens.token.calls = calls
     tokens.token.commands = commands
-    if tokens.token.commands ~= 15 and
-      tokens.token.calls ~= 40 and
-      tokens.token.calls ~= 60 then
-      print(commands)
-      error("Function definition contains illegal number of instructions")
+    if commands ~= 15 and
+      commands ~= 40 and
+      commands ~= 60 then
+      error("The definition of function '"..func_name.."' contains an illegal number of instructions: "..commands)
     end
     return tokens.return_token()
     
@@ -133,8 +158,10 @@ tokens.create_token = function()
     tokens.add_e()
 
     -- todo validation of comparison
-    tokens.comp = tokens.word
+    tokens.token.comp = tokens.word
     tokens.cont()
+
+    tokens.add_e()
 
     local temp = tokens.token
     temp.on_true = {}
@@ -149,7 +176,6 @@ tokens.create_token = function()
       end
 
       table.insert(temp.on_true, tokens.create_token())
-      tokens.cont()
     end
     while tokens.word ~= "end" do
       for i, val in ipairs(tokens.commands) do
@@ -160,7 +186,6 @@ tokens.create_token = function()
       end
 
       table.insert(temp.on_false, tokens.create_token())
-      tokens.cont()
     end
     tokens.cont()
     tokens.token = temp

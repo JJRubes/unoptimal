@@ -84,7 +84,9 @@ interpreter.compare = function(x, y, str)
 end
 
 function interpreter.run_command(token)
-  -- print(token.name)
+  -- if token.name ~= "nop" then
+  --   print(token.name)
+  -- end
   if token.name == "repeat" then
     local x = interpreter.get_argument(token, 1)
     interpreter.inc_all()
@@ -97,12 +99,15 @@ function interpreter.run_command(token)
   elseif token.name == "if" then
     local x = interpreter.get_argument(token, 1)
     local y = interpreter.get_argument(token, 2)
+    -- print(x, token.comp, y)
     interpreter.inc_all()
     if interpreter.compare(x, y, token.comp) then
+      -- print("true")
       for i, func in ipairs(token.on_true) do
         interpreter.run_command(func)
       end
     else
+      -- print("false")
       for i, func in ipairs(token.on_false) do
         interpreter.run_command(func)
       end
@@ -175,6 +180,9 @@ function interpreter.run_command(token)
 
   elseif token.name == "out" then
     local x = interpreter.get_argument(token, 1)
+    if x == -1 then
+      error("attempted to output -1 as a character")
+    end
     io.write(string.char(x))
     interpreter.inc_all()
 
@@ -201,26 +209,31 @@ interpreter.def = function(token)
 end
 
 function interpreter.interpret(code)
+  ---- Tokenise the code ----
+  interpreter.token_list = tokens.tokenise(code)
+  ---- Get the first token ----
+  interpreter.tp = 1
+  token = interpreter.token_list[interpreter.tp]
+
+  ---- Initialise loops ----
   interpreter.loops = {X=loop:new(), Y=loop:new(), Z=loop:new(), D=loop:new()}
-  -- interpreter.loops = {X=loop:new(7), Y=loop:new(37), Z=loop:new(97), D=loop:new(1)}
   interpreter.loops.X:size(7)
   interpreter.loops.Y:size(37)
   interpreter.loops.Z:size(97)
   interpreter.loops.D:size(1)
 
-  interpreter.token_list = tokens.tokenise(code)
-  interpreter.tp = 1
-  token = interpreter.token_list[interpreter.tp]
-
+  ---- Define functions ----
   interpreter.funcs = {}
   for i, command in ipairs(interpreter.token_list) do
     if command.name == "def" then
       interpreter.funcs[command.func_name] = command
+    else
+      error("Commands outside of a function definition")
     end
   end
 
   if not interpreter.funcs.entry then
-    error("no entry function")
+    error("No entry function")
   end
   interpreter.run_command({name="func_call", func_name="entry"})
 end
