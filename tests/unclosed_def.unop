@@ -1,0 +1,4 @@
+def unclosed
+  nop
+  nop
+  nop

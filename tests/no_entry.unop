@@ -1,0 +1,17 @@
+def test
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+  mov z 100
+end
