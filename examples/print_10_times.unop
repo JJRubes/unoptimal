@@ -1,0 +1,56 @@
+def init
+  mov x 65
+  mov x 65
+  mov x 65
+  mov x 65
+  mov x 65
+  mov x 65
+  mov x 65
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+end
+
+def print_once
+  out x
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+end
+
+def entry
+  init
+  repeat 10
+    print_once
+  end
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+end

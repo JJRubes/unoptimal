@@ -1,0 +1,58 @@
+def read
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  in x
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  if x != -1
+    print
+  end
+end
+
+def print
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  out x
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  if x != -1
+    read
+  end
+  nop
+end
+
+def entry
+  read
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+end

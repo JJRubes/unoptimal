@@ -1,0 +1,58 @@
+def init
+  in X
+  nop
+  in X
+  nop
+  in X
+  nop
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  first
+end
+
+def first
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  second
+end
+
+def second
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  out X
+  in X
+  first
+end
+
+init
