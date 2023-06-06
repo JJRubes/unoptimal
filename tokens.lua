@@ -27,18 +27,6 @@ tokens.req = function()
   return t
 end
 
-tokens.cont = function()
-  tokens.ip = tokens.ip + 1
-
-  if tokens.ip > #tokens.code then
-    return false
-  end
-
-  tokens.word = tokens.code[tokens.ip]
-
-  return true
-end
-
 tokens.add_token = function()
   table.insert(tokens.tokens, tokens.token)
   tokens.token = {}
@@ -64,15 +52,21 @@ tokens.add_l = function()
   end
 end
 
--- todo: validation
 tokens.add_e = function()
   local l = string.upper(tokens.req())
   if l == "X" or l == "Y" or
     l == "Z" or l == "D" then
     table.insert(tokens.token.arguments, l)
-  else
-    table.insert(tokens.token.arguments, tonumber(l))
+    return
   end
+
+  local n = tonumber(l)
+  if n then
+    table.insert(tokens.token.arguments, n)
+    return
+  end
+
+  error("Argument not a loop name or a number: "..l)
 end
 
 tokens.commands = {
@@ -172,8 +166,15 @@ tokens.create_token = function()
     tokens.name(tokens.word)
     tokens.add_e()
 
-    -- todo validation of comparison
     tokens.token.comp = tokens.req()
+    if tokens.token.comp ~= "==" and
+      tokens.token.comp ~= "!=" and
+      tokens.token.comp ~= "<" and
+      tokens.token.comp ~= "<=" and
+      tokens.token.comp ~= ">" and
+      tokens.token.comp ~= ">=" then
+      error("Invalid comparison operator: "..tokens.token.comp)
+    end
 
     tokens.add_e()
 
