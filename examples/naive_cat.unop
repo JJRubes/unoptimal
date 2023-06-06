@@ -1,4 +1,4 @@
-def init
+def entry
   in X
   nop
   in X
@@ -54,5 +54,3 @@ def second
   in X
   first
 end
-
-init

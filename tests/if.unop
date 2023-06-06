@@ -1,0 +1,44 @@
+def true
+  mov x 1
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+end
+
+def entry
+  if x != 0
+  end
+  
+  if x != 0
+    true
+  end
+
+  if x != 0
+    true
+    true
+  end
+
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+end

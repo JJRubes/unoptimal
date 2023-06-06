@@ -6,6 +6,27 @@ tokens.code = {}
 tokens.tokens = {}
 tokens.token = {}
 
+tokens.get = function()
+  tokens.ip = tokens.ip + 1
+
+  if tokens.ip > #tokens.code then
+    tokens.ip = tokens.ip - 1
+    return false
+  end
+
+  tokens.word = tokens.code[tokens.ip]
+
+  return tokens.word
+end
+
+tokens.req = function()
+  local t = tokens.get()
+  if not t then
+    error("Premature End Of File")
+  end
+  return t
+end
+
 tokens.cont = function()
   tokens.ip = tokens.ip + 1
 
@@ -31,33 +52,26 @@ end
 
 tokens.name = function(name)
   tokens.token.name = name
-  tokens.cont()
 end
 
 tokens.add_l = function()
-  local l = string.upper(tokens.word)
+  local l = string.upper(tokens.req())
   if l == "X" or l == "Y" or
     l == "Z" or l == "D" then
     table.insert(tokens.token.arguments, l)
   else
-    error("Invalid Loop Name")
+    error("Invalid Loop Name: "..l)
   end
-
-  tokens.cont()
 end
 
-tokens.add_n = function()
-  table.insert(tokens.token.arguments, tonumber(tokens.word))
-  tokens.cont()
-end
-
+-- todo: validation
 tokens.add_e = function()
-  local l = string.upper(tokens.word)
+  local l = string.upper(tokens.req())
   if l == "X" or l == "Y" or
     l == "Z" or l == "D" then
-    tokens.add_l()
+    table.insert(tokens.token.arguments, l)
   else
-    tokens.add_n()
+    table.insert(tokens.token.arguments, tonumber(l))
   end
 end
 
@@ -94,34 +108,34 @@ tokens.is_keyword = function(func_name)
   if func_name == "end" then
     return true
   end
-  if func_name == "end" then
-    return true
-  end
   return false
 end
 
 tokens.create_token = function()
   if tokens.word == "def" then
     local name = tokens.word
-    tokens.cont()
 
-    local func_name = tokens.word
+    local func_name = tokens.req()
     if tokens.is_keyword(func_name) then
       error("Function definition with a reserved name: "..func_name)
     end
-    tokens.cont()
 
     local calls = {}
     local commands = 0
+    tokens.req()
     while tokens.word ~= "end" do
+      if tokens.word == "def" then
+        error("Cannot have nested definitions")
+      end
       for i, val in ipairs(tokens.commands) do
         if tokens.word == val then
           commands = commands + 1
         end
       end
       table.insert(calls, tokens.create_token())
+      tokens.req()
     end
-    tokens.cont()
+
     tokens.token.name = name
     tokens.token.func_name = func_name
     tokens.token.calls = calls
@@ -139,6 +153,7 @@ tokens.create_token = function()
     tokens.token.calls = {}
     local temp = tokens.token
     tokens.token = {arguments={}}
+    tokens.req()
     while tokens.word ~= "end" do
       for i, val in ipairs(tokens.commands) do
         if tokens.word == val then
@@ -148,8 +163,8 @@ tokens.create_token = function()
       end
 
       table.insert(temp.calls, tokens.create_token())
+      tokens.req()
     end
-    tokens.cont()
     tokens.token = temp
     return tokens.return_token()
 
@@ -158,8 +173,7 @@ tokens.create_token = function()
     tokens.add_e()
 
     -- todo validation of comparison
-    tokens.token.comp = tokens.word
-    tokens.cont()
+    tokens.token.comp = tokens.req()
 
     tokens.add_e()
 
@@ -167,6 +181,7 @@ tokens.create_token = function()
     temp.on_true = {}
     temp.on_false = {}
     tokens.token = {arguments={}}
+    tokens.req()
     while tokens.word ~= "end" and tokens.word ~= "else" do
       for i, val in ipairs(tokens.commands) do
         if tokens.word == val then
@@ -176,18 +191,22 @@ tokens.create_token = function()
       end
 
       table.insert(temp.on_true, tokens.create_token())
+      tokens.req()
     end
-    while tokens.word ~= "end" do
-      for i, val in ipairs(tokens.commands) do
-        if tokens.word == val then
-          error("If can only contain function calls")
-          break
+    if tokens.word == "else" then
+      tokens.req()
+      while tokens.word ~= "end" do
+        for i, val in ipairs(tokens.commands) do
+          if tokens.word == val then
+            error("If can only contain function calls")
+            break
+          end
         end
-      end
 
-      table.insert(temp.on_false, tokens.create_token())
+        table.insert(temp.on_false, tokens.create_token())
+        tokens.req()
+      end
     end
-    tokens.cont()
     tokens.token = temp
     return tokens.return_token()
 
@@ -258,10 +277,11 @@ tokens.create_token = function()
   elseif tokens.word == "nop" then
     tokens.name(tokens.word)
     return tokens.return_token()
+  elseif tokens.word == "end" then
+    error("bad")
   else
     tokens.token.name = "func_call"
     tokens.token.func_name = tokens.word
-    tokens.cont()
     return tokens.return_token()
   end
 end
@@ -278,9 +298,9 @@ tokens.tokenise = function(code)
   end
 
   tokens.ip = 0
-  tokens.cont()
 
-  while tokens.ip <= #tokens.code do
+  while tokens.ip < #tokens.code do
+    tokens.get()
     local t = tokens.create_token()
     if t.name ~= "def" then
       error("Command outside of function scope")
