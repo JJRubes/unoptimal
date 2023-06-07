@@ -78,7 +78,7 @@ tokens.commands = {
   "or",
   "xor",
   "not",
-  "mov",
+  "cpy",
   "set",
   "in",
   "out",
@@ -258,7 +258,7 @@ tokens.create_token = function()
     tokens.add_l()
     tokens.add_e()
     return tokens.return_token()
-  elseif tokens.word == "mov" then
+  elseif tokens.word == "cpy" then
     tokens.name(tokens.word)
     tokens.add_l()
     tokens.add_e()

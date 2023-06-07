@@ -1,5 +1,5 @@
 def true
-  mov x 1
+  cpy x 1
   nop
   nop
   nop

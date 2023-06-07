@@ -155,7 +155,7 @@ function interpreter.run_command(token)
     interpreter.loops[token.arguments[1]]:set(x ~ y)
     interpreter.inc_all()
 
-  elseif token.name == "mov" then
+  elseif token.name == "cpy" then
     local x = interpreter.get_argument(token, 2)
     interpreter.loops[token.arguments[1]]:set(x)
     interpreter.inc_all()
